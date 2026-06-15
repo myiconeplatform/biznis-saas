@@ -1,3 +1,4 @@
+import EmployeeLogin from './EmployeeLogin';
 import { useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
@@ -107,6 +108,7 @@ export default function ICSBiznis({ profile, onLogout }) {
   const [employees, setEmployees] = useState([]);
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [empSession, setEmpSession] = useState(null);
   const [toast, setToast] = useState(null);
   const [cart, setCart] = useState([]);
   const [posBizId, setPosBizId] = useState(null);
@@ -253,7 +255,7 @@ export default function ICSBiznis({ profile, onLogout }) {
   const totalSales = sales.reduce((s,x)=>s+Number(x.total),0);
   const todaySales = sales.filter(s=>s.date===today()).reduce((s,x)=>s+Number(x.total),0);
   const lowStock = products.filter(p=>p.stock<10&&p.stock<999);
-
+if(!empSession) return <EmployeeLogin tenantId={tenantId} onLogin={setEmpSession} />;
   if(loading) return (
     <div style={{minHeight:"100vh",background:C.bg,display:"flex",alignItems:"center",justifyContent:"center",color:C.muted,fontSize:16}}>
       ⏳ Ap chaje...
