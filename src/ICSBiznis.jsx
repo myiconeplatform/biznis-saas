@@ -1,6 +1,125 @@
-import EmployeeLogin from './EmployeeLogin';
 import { useState, useEffect } from "react";
 import { supabase } from "./supabase";
+import EmployeeLogin from './EmployeeLogin';
+// ── RECU MODAL ──────────────────────────────────────────────
+function RecuModal({sale, biznis, employee, onClose}) {
+  const now = new Date();
+  const dat = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+  const lè = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  
+  const recuId = `VNT-${String(now.getFullYear()).slice(2)}-${String(sale.id||Math.floor(Math.random()*99999)).padStart(5,'0')}`;
+
+  const recuStyle = {
+    fontFamily:"'Courier New',monospace",
+    background:"white",
+    width:"300px",
+    margin:"0 auto",
+    padding:"20px 16px",
+    fontSize:12,
+    color:"#000",
+    lineHeight:1.6,
+  };
+
+  const divider = (char='─',len=32) => (
+    <div style={{color:"#555",margin:"6px 0",fontSize:11}}>{char.repeat(len)}</div>
+  );
+
+  const row = (label, val, bold=false) => (
+    <div style={{display:"flex",justifyContent:"space-between",margin:"3px 0"}}>
+      <span style={{color:"#444"}}>{label}</span>
+      <span style={{fontWeight:bold?"bold":"normal"}}>{val}</span>
+    </div>
+  );
+
+  const doPrint = () => {
+    const el = document.getElementById('print-recu-biznis');
+    if(el){ el.style.display='block'; }
+    setTimeout(()=>{
+      window.print();
+      setTimeout(()=>{ if(el) el.style.display='none'; }, 500);
+    }, 100);
+  };
+
+  const RecuContent = () => (
+    <div style={recuStyle}>
+      <div style={{textAlign:"center",marginBottom:8}}>
+        <div style={{fontSize:16,fontWeight:"bold",letterSpacing:2}}>ICS BIZNIS</div>
+        <div style={{fontSize:11,color:"#555"}}>{biznis?.name||"Biznis"}</div>
+        <div style={{fontSize:10,color:"#555"}}>ICS ONE Platform</div>
+      </div>
+      {divider('═',32)}
+      <div style={{textAlign:"center",fontWeight:"bold",fontSize:13,margin:"6px 0"}}>
+        ✦ REÇU VANT ✦
+      </div>
+      {divider()}
+      {row("Reçu #:", recuId, true)}
+      {row("Dat:", dat)}
+      {row("Lè:", lè)}
+      {row("Caissier:", employee?.name||"—")}
+      {divider()}
+      <div style={{fontWeight:"bold",fontSize:11,margin:"4px 0",textTransform:"uppercase"}}>Detay Achè</div>
+      {(sale.items||[{name:sale.product_name,qty:sale.qty,price:sale.total/sale.qty,total:sale.total}]).map((item,i)=>(
+        <div key={i} style={{display:"flex",justifyContent:"space-between",margin:"3px 0"}}>
+          <span>{item.name} x{item.qty}</span>
+          <span style={{fontWeight:"bold"}}>{Number(item.total||0).toLocaleString()} HTG</span>
+        </div>
+      ))}
+      {divider('═',32)}
+      <div style={{textAlign:"center",margin:"8px 0"}}>
+        <div style={{fontSize:11,color:"#555"}}>TOTAL</div>
+        <div style={{fontSize:22,fontWeight:"bold",letterSpacing:1}}>
+          {Number(sale.total||0).toLocaleString()} HTG
+        </div>
+      </div>
+      {divider('═',32)}
+      <div style={{textAlign:"center",fontSize:10,color:"#555",marginTop:8}}>
+        <div>Mèsi pou achè ou!</div>
+        <div>* * * * * * * * * * * * * * * *</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Hidden print area */}
+      <div id="print-recu-biznis" style={{position:"fixed",left:0,top:0,zIndex:99998,background:"white",width:"100%",display:"none"}}>
+        <RecuContent/>
+      </div>
+
+      {/* Modal preview */}
+      <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",zIndex:2000,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+        <div style={{background:"#222538",borderRadius:14,width:"100%",maxWidth:420,maxHeight:"90vh",display:"flex",flexDirection:"column",boxShadow:"0 24px 60px rgba(0,0,0,0.5)"}}>
+          {/* Header */}
+          <div style={{padding:"16px 24px",background:"#1a1d2e",borderRadius:"14px 14px 0 0",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <div style={{color:"#8b85ff",fontWeight:"bold",fontSize:15}}>Reçu Vant</div>
+              <div style={{color:"#7b80a0",fontSize:11,marginTop:2}}>{recuId}</div>
+            </div>
+            <button onClick={onClose} style={{background:"none",border:"none",color:"#7b80a0",fontSize:22,cursor:"pointer"}}>×</button>
+          </div>
+
+          {/* Preview */}
+          <div style={{flex:1,overflowY:"auto",padding:24,background:"#0f1117",display:"flex",justifyContent:"center"}}>
+            <div style={{...recuStyle,boxShadow:"0 4px 20px rgba(0,0,0,0.3)",borderRadius:4}}>
+              <RecuContent/>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{padding:"14px 24px",borderTop:"1px solid #2e3250",display:"flex",gap:10,justifyContent:"flex-end",background:"#1a1d2e",borderRadius:"0 0 14px 14px"}}>
+            <button onClick={onClose} style={{background:"transparent",color:"#7b80a0",border:"1px solid #2e3250",borderRadius:8,padding:"8px 18px",fontSize:13,cursor:"pointer"}}>
+              Fèmen
+            </button>
+            <button onClick={doPrint} style={{background:"#22d3a0",color:"#fff",border:"none",borderRadius:8,padding:"8px 18px",fontSize:13,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:8}}>
+              🖨️ Enprime Reçu
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 
 const C = {
   bg:"#0f1117", surface:"#1a1d2e", card:"#222538",
