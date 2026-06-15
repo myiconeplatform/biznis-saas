@@ -1,3 +1,4 @@
+import ICSCaisse from './ICSCaisse';
 import ICSBiznis from './ICSBiznis';
 import{useState,useEffect}from"react";import{supabase}from"./supabase";
 const C={bg:"#0f1117",surface:"#1a1d2e",card:"#222538",accent:"#6c63ff",accentLight:"#8b85ff",green:"#22d3a0",orange:"#f97316",red:"#ef4444",yellow:"#facc15",text:"#e8eaf6",muted:"#7b80a0",border:"#2e3250"};
