@@ -22,13 +22,6 @@ const NAV = [
   {id:"reports", label:"Rapò", icon:"📈", perm:"rapò_we"},
 ];
 
-  {id:"dashboard", label:"Dashboard", icon:"📊"},
-  {id:"businesses", label:"Biznis Mwen", icon:"🏢"},
-  {id:"pos", label:"Vant / Kès", icon:"💳"},
-  {id:"inventory", label:"Envantè", icon:"📦"},
-  {id:"employees", label:"Anplwaye", icon:"👥"},
-  {id:"reports", label:"Rapò", icon:"📈"},
-];
 
 const ICONS = ["🏪","🍽️","💇","🏬","🛒","🏥","🎓","💊","🔧","👗","📱","🚗"];
 const COLORS = ["#6c63ff","#22d3a0","#f97316","#ef4444","#facc15","#3b82f6","#ec4899","#8b5cf6"];
