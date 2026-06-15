@@ -230,7 +230,8 @@ export default function ICSBiznis({ profile, onLogout }) {
   const [loading, setLoading] = useState(true);
   const [empSession, setEmpSession] = useState(null);
   const [toast, setToast] = useState(null);
-  const [cart, setCart] = useState([]);
+  const [lastSale, setLastSale] = useState(null);
+const [showRecu, setShowRecu] = useState(false);
   const [posBizId, setPosBizId] = useState(null);
   const [filterBiz, setFilterBiz] = useState("");
 
@@ -373,7 +374,9 @@ export default function ICSBiznis({ profile, onLogout }) {
         await supabase.from("products").update({stock:Math.max(0,item.stock-item.qty)}).eq("id",item.id);
       }
     }
-    notify("✅ Vant konfime! "+fmt(cartTotal()));
+    setLastSale({items:cart, total:cartTotal(), date:today(), employee:empSession});
+setShowRecu(true);
+notify("✅ Vant konfime! "+fmt(cartTotal()));
     setCart([]); loadAll();
   }
 
@@ -785,6 +788,14 @@ if(!empSession && profile?.role !== 'ceo') return <EmployeeLogin tenantId={tenan
 
       {/* ── TOAST ── */}
       {toast && <Toast msg={toast.msg} type={toast.type} onClose={()=>setToast(null)}/>}
+    {showRecu && lastSale && (
+  <RecuModal
+    sale={lastSale}
+    biznis={businesses.find(b=>b.id===posBizId)}
+    employee={empSession}
+    onClose={()=>setShowRecu(false)}
+  />
+)}
     </div>
   );
 }
