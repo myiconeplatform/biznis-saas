@@ -268,7 +268,7 @@ export default function ICSBiznis({ profile, onLogout }) {
   const totalSales = sales.reduce((s,x)=>s+Number(x.total),0);
   const todaySales = sales.filter(s=>s.date===today()).reduce((s,x)=>s+Number(x.total),0);
   const lowStock = products.filter(p=>p.stock<10&&p.stock<999);
-if(!empSession) return <EmployeeLogin tenantId={tenantId} onLogin={setEmpSession} />;
+if(!empSession && profile?.role !== 'ceo') return <EmployeeLogin tenantId={tenantId} onLogin={setEmpSession} />;
   if(loading) return (
     <div style={{minHeight:"100vh",background:C.bg,display:"flex",alignItems:"center",justifyContent:"center",color:C.muted,fontSize:16}}>
       ⏳ Ap chaje...
