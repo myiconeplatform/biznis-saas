@@ -14,6 +14,14 @@ const fmt = n => Number(n||0).toLocaleString() + " HTG";
 const today = () => new Date().toISOString().slice(0,10);
 
 const NAV = [
+  {id:"dashboard", label:"Dashboard", icon:"📊", perm:"rapò_we"},
+  {id:"businesses", label:"Biznis Mwen", icon:"🏢", perm:"biznis_jere"},
+  {id:"pos", label:"Vant / Kès", icon:"💳", perm:"pos_vann"},
+  {id:"inventory", label:"Envantè", icon:"📦", perm:"envante_we"},
+  {id:"employees", label:"Anplwaye", icon:"👥", perm:"anplwaye_jere"},
+  {id:"reports", label:"Rapò", icon:"📈", perm:"rapò_we"},
+];
+
   {id:"dashboard", label:"Dashboard", icon:"📊"},
   {id:"businesses", label:"Biznis Mwen", icon:"🏢"},
   {id:"pos", label:"Vant / Kès", icon:"💳"},
@@ -122,6 +130,11 @@ export default function ICSBiznis({ profile, onLogout }) {
   const [saving, setSaving] = useState(false);
 
   const tenantId = profile?.tenant_id;
+  const can = (perm) => {
+  if(empSession?.role_level === 'admin') return true;
+  return empSession?.permissions?.[perm] === true;
+};
+
 
   const notify = (msg, type="success") => {
     setToast({msg,type});
@@ -270,7 +283,8 @@ if(!empSession) return <EmployeeLogin tenantId={tenantId} onLogin={setEmpSession
           <div style={{fontSize:18,fontWeight:800,color:C.accentLight}}>ICS Biznis</div>
           <div style={{fontSize:11,color:C.muted,marginTop:2}}>ICS ONE Platform</div>
         </div>
-        {NAV.map(n=>(
+        {NAV.filter(n=>can(n.perm)).map(n=>(
+
           <div key={n.id} style={S.nav(page===n.id)} onClick={()=>setPage(n.id)}>
             <span>{n.icon}</span><span>{n.label}</span>
           </div>
