@@ -61,7 +61,8 @@ function RecuModal({sale, biznis, employee, onClose}) {
       {(sale.items||[{name:sale.product_name,qty:sale.qty,price:sale.total/sale.qty,total:sale.total}]).map((item,i)=>(
         <div key={i} style={{display:"flex",justifyContent:"space-between",margin:"3px 0"}}>
           <span>{item.name} x{item.qty}</span>
-          <span style={{fontWeight:"bold"}}>{Number(item.total||0).toLocaleString()} HTG</span>
+          <span style={{fontWeight:"bold"}}>{Number(item.total || item.price*item.qty || 0).toLocaleString()} HTG
+</span>
         </div>
       ))}
       {divider('═',32)}
