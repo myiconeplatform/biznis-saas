@@ -241,7 +241,7 @@ const [showRecu, setShowRecu] = useState(false);
   const [empModal, setEmpModal] = useState(null);
   const [confirm, setConfirm] = useState(null);
   const [saving, setSaving] = useState(false);
-
+const [cart, setCart] = useState([]);
   const tenantId = profile?.tenant_id;
   const can = (perm) => {
   if(empSession?.role_level === 'admin') return true;
