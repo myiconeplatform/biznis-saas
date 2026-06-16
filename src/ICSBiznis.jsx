@@ -613,8 +613,8 @@ if(!empSession && profile?.role !== 'ceo') return <EmployeeLogin tenantId={tenan
                         <td style={S.td}><span style={S.badge(sc2)}>{sc}</span></td>
                         <td style={S.td}>
                           <div style={{display:"flex",gap:6}}>
-                            <button onClick={()=>{setProdForm({...p});setProdModal(p);}} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:6,padding:"4px 8px",color:C.muted,cursor:"pointer",fontSize:12}}>✏️</button>
-                            <button onClick={()=>setConfirm({msg:`Efase pwodui "${p.name}"?`,onYes:()=>deleteProd(p)})} style={{background:"none",border:`1px solid ${C.red}22`,borderRadius:6,padding:"4px 8px",color:C.red,cursor:"pointer",fontSize:12}}>🗑️</button>
+                            <button onClick={()=>{setProdForm({...p});setProdModal(p);}} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:6,padding:"4px 8px",color:C.muted,cursor:"pointer",fontSize:12,display:can("envante_jere")?"":"none"}}>✏️</button>
+                            <button onClick={()=>can("envante_jere")&&setConfirm({msg:`Efase pwodui "${p.name}"?`,onYes:()=>deleteProd(p)})} style={{background:"none",border:`1px solid ${C.red}22`,borderRadius:6,padding:"4px 8px",color:C.red,cursor:"pointer",fontSize:12}}>🗑️</button>
                           </div>
                         </td>
                       </tr>
